@@ -1,0 +1,37 @@
+% Item Class
+% T in paper = TSync + MaxAge
+classdef Item < handle
+    properties
+        % Parameters that are synced
+        Name      (1,1) string = "I" %Item Name for readability
+        TPsi      = 0 %Generation Time [s]
+        PPsi      = 1 %Priority [#]
+        SPsi      = 1 %Size [MB]
+
+        % Sim Parameters
+        NewGenerationTime = 0 %Time To Generate new Item [s]
+    end
+    methods
+        function I = Item(n,t,p,s)
+            I.Name  = n;
+            I.TPsi = t;
+            I.PPsi = p;
+            I.SPsi = s;
+        end
+        function o = AoS(it,t)
+            arguments
+                it   (1,1) Item
+                t    (1,1) double {mustBeReal, mustBeNonnegative} %current time
+            end
+            % Account for Sync Delay
+            o = max(0, t - it.TPSi);
+        end
+        function o = AoI(it,t)
+            arguments
+                it   (1,1) Item
+                t    (1,1) double {mustBeReal, mustBeNonnegative} %current time
+            end
+            o = t - it.TPsi - it.NewGenerationTime; 
+        end
+    end
+end
